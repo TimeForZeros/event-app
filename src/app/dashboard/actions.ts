@@ -11,7 +11,13 @@ import {
   NewEventTagJunction,
 } from '@/db';
 import { eq, inArray } from 'drizzle-orm';
-import type { NewEventFormSchema } from './schemas';
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
+
+export const getSession = async () =>
+  auth.api.getSession({
+    headers: await headers(),
+  });
 
 export const addTags = async (eventId: number, tagString: string) => {
   const getExistingTags = async (tagNames: string[]): Promise<EventTag[]> =>
@@ -61,9 +67,15 @@ type NewEventResponse = {
   event: Event;
   tags?: EventTag[];
 };
-
-export const createNewEvent = async (data: NewEventFormSchema) => {
-  const newEvent: NewEvent = { name: data.name, date: data.date || null, details: data.details };
+// TODO: fill out the data type
+export const createNewEvent = async (data: any) => {
+  const newEvent: NewEvent = {
+    name: data.name,
+    ownerId: data.ownerId,
+    date: data.date || null,
+    details: data.details,
+  };
+  console.log(newEvent);
   const [eventRow] = await db.insert(event).values(newEvent).returning();
   const response: NewEventResponse = { event: eventRow };
   if (data.tags) {

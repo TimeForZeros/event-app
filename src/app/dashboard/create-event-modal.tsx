@@ -38,7 +38,7 @@ const fieldTypes: FieldTypes = {
   tags: 'text',
 };
 
-const CreateEventModal = () => {
+const CreateEventModal = ({ userId }: { userId: string }) => {
   const form = useForm<NewEventFormSchema>({
     resolver: zodResolver(newEventFormSchema),
     defaultValues: {
@@ -49,7 +49,7 @@ const CreateEventModal = () => {
     },
   });
   const handleSubmit = async (data: NewEventFormSchema) => {
-    const res = await createNewEvent(data);
+    const res = await createNewEvent({...data, ownerId: userId});
     console.log(res);
   };
   return (

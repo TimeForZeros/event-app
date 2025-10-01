@@ -1,13 +1,18 @@
 import React from 'react';
 import CreateEventModal from './create-event-modal';
+import { getSession } from './actions';
+import EventContainer from './event-container';
 
-
-const Dashboard = () => {
+const Dashboard = async () => {
+  const session = await getSession();
+  if (!session) {
+    // TODO: do something here
+    return;
+  }
   return (
-    <section>
-      <h1 className="mx-auto w-[50%] place-items-center text-center">Test</h1>
-      <CreateEventModal />
-      <div className=" w-[100%] flex justify-center items-center"></div>
+    <section className='w-full h-full flex justify-center items-center'>
+      <EventContainer />
+      {/* <CreateEventModal userId={session.user.id} /> */}
     </section>
   );
 };
