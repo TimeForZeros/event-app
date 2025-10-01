@@ -10,11 +10,18 @@ const fieldTypes: Record<string, string> = {
   password: 'password',
   confirmPassword: 'password',
 };
+type FormProps = {
+  form: UseFormReturn<any>;
+  handleAction: (values: any) => void | Promise<void>;
+  errorMessage: string | undefined;
+};
 
-const AuthForm = ({ form, handleAction }: {form: UseFormReturn<any>, handleAction: (values: any) => void | Promise<void>}) => {
+
+const AuthForm = ({ form, handleAction, errorMessage }: FormProps) => {
   const fields = Object.keys(form.getValues());
   return (
     <Form {...form}>
+      <FormMessage>{errorMessage}</FormMessage>
       <form onSubmit={form.handleSubmit(handleAction)}>
         {fields.map((fieldName) => {
           return (
@@ -23,7 +30,7 @@ const AuthForm = ({ form, handleAction }: {form: UseFormReturn<any>, handleActio
               control={form.control}
               name={fieldName}
               render={({ field }) => (
-                <FormItem className='my-1'>
+                <FormItem className="my-1">
                   <FormMessage />
                   <FormControl>
                     <Input

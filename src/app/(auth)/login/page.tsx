@@ -2,7 +2,7 @@
 
 import { z } from 'zod';
 import { login } from '../actions';
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import AuthForm from '../auth-form';
@@ -17,6 +17,7 @@ const loginSchema = z.object({
 });
 
 const LogIn = () => {
+  const [errorMessage, setErrorMessage] = useState<string | undefined>('');
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -26,16 +27,18 @@ const LogIn = () => {
   });
   const handleLogin = async (values: z.infer<typeof loginSchema>) => {
     try {
-      const res = await login(values);
-      console.log(res);
+      const { error } = await login(values);
+      if (!error) return;
+      setErrorMessage(error.message);
     } catch (err) {
-      console.error(err);
+        setErrorMessage('Unknown Error');
+
     }
   };
 
   return (
     <FormCardWrapper title="Log In">
-      <AuthForm form={form} handleAction={handleLogin} />
+      <AuthForm form={form} errorMessage={errorMessage} handleAction={handleLogin} />
     </FormCardWrapper>
   );
 };
