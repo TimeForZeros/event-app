@@ -13,7 +13,7 @@ const fieldTypes: Record<string, string> = {
 type FormProps = {
   form: UseFormReturn<any>;
   handleAction: (values: any) => void | Promise<void>;
-  errorMessage: string | undefined;
+  errorMessage?: string;
 };
 
 
