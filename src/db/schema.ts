@@ -97,3 +97,6 @@ export type NewUser = typeof user.$inferInsert;
 export type Event = typeof event.$inferSelect;
 export type NewEvent = typeof event.$inferInsert;
 export type EventTag = typeof eventTag.$inferSelect;
+export type NewEventTag = typeof eventTag.$inferInsert;
+export type EventTagJunction = typeof eventTagJunction.$inferSelect
+export type NewEventTagJunction = typeof eventTagJunction.$inferInsert

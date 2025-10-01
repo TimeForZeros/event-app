@@ -1,3 +1,4 @@
+'use client';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -9,10 +10,26 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import FormComponent from '../form';
 import type { FieldTypes } from '../types';
+
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { createNewEvent } from './actions';
+import { z } from 'zod';
+
+type NewEventFormSchema = z.infer<typeof newEventFormSchema>;
+
+const newEventFormSchema = z.object({
+  name: z.string().nonempty('Please provide a name'),
+  date: z.string(),
+  details: z.string(),
+  tags: z
+    .string()
+    .refine((tagStr) => !tagStr.length || tagStr.charAt(0) === '#', 'Tags must start with #')
+    .refine((tagStr) => !tagStr.length || tagStr.trim().length > 1, 'empty tag')
+    .optional(),
+});
 
 const fieldTypes: FieldTypes = {
   name: 'text',
@@ -22,38 +39,37 @@ const fieldTypes: FieldTypes = {
 };
 
 const CreateEventModal = () => {
+  const form = useForm<NewEventFormSchema>({
+    resolver: zodResolver(newEventFormSchema),
+    defaultValues: {
+      name: '',
+      details: '',
+      date: '',
+      tags: '',
+    },
+  });
+  const handleSubmit = async (data: NewEventFormSchema) => {
+    const res = await createNewEvent(data);
+    console.log(res);
+  };
   return (
     <Dialog>
-      <form>
-        <DialogTrigger asChild>
-          <Button variant="outline">Create Event</Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>New Event</DialogTitle>
-            {/* <DialogDescription>
-              Add New Item
-            </DialogDescription> */}
-          </DialogHeader>
-          {/* <div className="grid gap-4">
-            <div className="grid gap-3">
-              <Label htmlFor="name-1">Name</Label>
-              <Input id="name-1" name="name" defaultValue="Pedro Duarte" />
-            </div>
-            <div className="grid gap-3">
-              <Label htmlFor="username-1">Username</Label>
-              <Input id="username-1" name="username" defaultValue="@peduarte" />
-            </div>
-          </div> */}
-          <FormComponent />
+      <DialogTrigger asChild>
+        <Button variant="outline">Create Event</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>New Event</DialogTitle>
+        </DialogHeader>
+        <FormComponent form={form} fieldTypes={fieldTypes} handleAction={handleSubmit}>
           <DialogFooter>
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <Button type="submit">Save changes</Button>
+            <Button type="submit">Create</Button>
           </DialogFooter>
-        </DialogContent>
-      </form>
+        </FormComponent>
+      </DialogContent>
     </Dialog>
   );
 };
