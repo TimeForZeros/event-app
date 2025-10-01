@@ -1,5 +1,11 @@
 import React from 'react';
 
+
+
+const CreateEvent = () => {
+  
+}
+
 const Dashboard = () => {
   return (
     <section>

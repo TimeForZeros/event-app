@@ -4,20 +4,18 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { capitalize } from '@/lib/utils';
 import type { UseFormReturn } from 'react-hook-form';
+import type { FieldTypes } from './types';
 
-const fieldTypes: Record<string, string> = {
-  email: 'email',
-  password: 'password',
-  confirmPassword: 'password',
-};
 type FormProps = {
   form: UseFormReturn<any>;
+  fieldTypes: FieldTypes,
   handleAction: (values: any) => void | Promise<void>;
   errorMessage?: string;
 };
 
 
-const AuthForm = ({ form, handleAction, errorMessage }: FormProps) => {
+const FormComponent = ({ form, fieldTypes, handleAction, errorMessage }: FormProps) => {
+  console.log(fieldTypes);
   const fields = Object.keys(form.getValues());
   return (
     <Form {...form}>
@@ -50,4 +48,4 @@ const AuthForm = ({ form, handleAction, errorMessage }: FormProps) => {
   );
 };
 
-export default AuthForm;
+export default FormComponent;

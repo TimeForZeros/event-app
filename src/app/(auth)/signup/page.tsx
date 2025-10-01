@@ -5,7 +5,8 @@ import { signUp } from '../actions';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import FormCardWrapper from '../form-card-wrapper';
-import AuthForm from '../auth-form';
+import FormComponent from '../../form';
+import { FieldTypes } from '@/app/types';
 
 const signUpSchema = z
   .object({
@@ -25,6 +26,12 @@ const signUpSchema = z
     path: ['confirmPassword'],
   });
 
+const fieldTypes: FieldTypes = {
+  email: 'email',
+  password: 'password',
+  confirmPassword: 'password',
+};
+
 const SignUp = () => {
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
@@ -37,11 +44,11 @@ const SignUp = () => {
   });
   const handleSignUp = async (values: z.infer<typeof signUpSchema>) => {
     console.log(values);
-    await signUp(values)
+    await signUp(values);
   };
   return (
     <FormCardWrapper title="Log In">
-      <AuthForm form={form} handleAction={handleSignUp} />
+      <FormComponent fieldTypes={fieldTypes} form={form} handleAction={handleSignUp} />
     </FormCardWrapper>
   );
 };

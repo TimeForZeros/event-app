@@ -5,8 +5,9 @@ import { login } from '../actions';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import AuthForm from '../auth-form';
+import FormComponent from '../../form';
 import FormCardWrapper from '../form-card-wrapper';
+import { FieldTypes } from '@/app/types';
 
 const loginSchema = z.object({
   email: z.email({ error: 'Invalid Email Format' }),
@@ -15,6 +16,11 @@ const loginSchema = z.object({
     .min(8, 'Password must be at least 8 characters in length')
     .max(256, 'Password exceeds maximum length'),
 });
+
+const fieldTypes: FieldTypes = {
+  email: 'email',
+  password: 'password',
+};
 
 const LogIn = () => {
   const [errorMessage, setErrorMessage] = useState<string | undefined>('');
@@ -31,14 +37,18 @@ const LogIn = () => {
       if (!error) return;
       setErrorMessage(error.message);
     } catch (err) {
-        setErrorMessage('Unknown Error');
-
+      setErrorMessage('Unknown Error');
     }
   };
 
   return (
     <FormCardWrapper title="Log In">
-      <AuthForm form={form} errorMessage={errorMessage} handleAction={handleLogin} />
+      <FormComponent
+        form={form}
+        fieldTypes={fieldTypes}
+        errorMessage={errorMessage}
+        handleAction={handleLogin}
+      />
     </FormCardWrapper>
   );
 };
