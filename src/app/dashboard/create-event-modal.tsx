@@ -49,7 +49,13 @@ const CreateEventModal = ({ userId }: { userId: string }) => {
     },
   });
   const handleSubmit = async (data: NewEventFormSchema) => {
-    const res = await createNewEvent({...data, ownerId: userId});
+    const tags = data.tags
+      ? data.tags
+          .split('#')
+          .map((tag) => tag.trim())
+          .filter(Boolean)
+      : [];
+    const res = await createNewEvent({ ...data, ownerId: userId, tags });
     console.log(res);
   };
   return (

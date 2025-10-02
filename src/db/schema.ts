@@ -22,6 +22,7 @@ export const event = pgTable('event', {
     .notNull()
     .references(() => user.id, { onDelete: 'cascade' }),
   name: varchar('name', { length: 126 }).notNull(),
+  tags: text('tags').array().default([]).notNull(),
   date: date(),
   details: text(),
   createdAt: timestamp('created_at').defaultNow().notNull(),

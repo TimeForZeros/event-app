@@ -13,11 +13,20 @@ import {
 import { eq, inArray } from 'drizzle-orm';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
 
-export const getSession = async () =>
-  auth.api.getSession({
+export const getSession = async () => {
+  const session = await auth.api.getSession({
     headers: await headers(),
   });
+  if (!session) redirect('/login');
+  return session;
+};
+
+export const getEvents = async (userId: string) => {
+  const eventsList = await db.select().from(event).where(eq(event.ownerId, userId));
+  return eventsList;
+};
 
 export const addTags = async (eventId: number, tagString: string) => {
   const getExistingTags = async (tagNames: string[]): Promise<EventTag[]> =>
@@ -72,15 +81,10 @@ export const createNewEvent = async (data: any) => {
   const newEvent: NewEvent = {
     name: data.name,
     ownerId: data.ownerId,
+    tags: data.tags || [],
     date: data.date || null,
     details: data.details,
   };
-  console.log(newEvent);
   const [eventRow] = await db.insert(event).values(newEvent).returning();
-  const response: NewEventResponse = { event: eventRow };
-  if (data.tags) {
-    const eventTags = await addTags(eventRow.id, data.tags);
-    response.tags = eventTags;
-  }
-  return response;
+  return eventRow;
 };

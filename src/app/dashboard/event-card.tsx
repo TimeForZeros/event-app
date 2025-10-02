@@ -8,21 +8,25 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import React from 'react';
+import { Event } from '@/db';
+type EventCardProps = {
+  event: Event;
+};
 
-const EventCard = () => {
+const EventCard = ({ event }: EventCardProps) => {
   return (
     <Card className="w-[12rem] h-[15rem] m-2 shadow-sm">
       <CardHeader>
-        <CardTitle>Card Title</CardTitle>
-        <CardDescription>Card Description</CardDescription>
-        <CardAction>Card Action</CardAction>
+        <CardTitle>{event.name}</CardTitle>
+        {/* TODO: create a filter when clicking a tag */}
+        <CardDescription>{event.tags.length > 0 && `#${event.tags.join(' #')}`}</CardDescription>
+        {/* <CardAction>Card Action</CardAction> */}
       </CardHeader>
       <CardContent>
-        <p>Card Content</p>
+        <span>{event.date}</span>
+        <p>{event.details}</p>
       </CardContent>
-      <CardFooter>
-        <p>Card Footer</p>
-      </CardFooter>
+      <CardFooter>{/* <p>Card Footer</p> */}</CardFooter>
     </Card>
   );
 };
