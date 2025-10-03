@@ -10,12 +10,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import FormComponent from '../form';
-import type { FieldTypes } from '../types';
+import FormComponent from '../../form';
+import type { FieldTypes } from '../../types';
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createNewEvent } from './actions';
+import { createNewEvent } from '../actions';
 import { z } from 'zod';
 
 type NewEventFormSchema = z.infer<typeof newEventFormSchema>;
@@ -61,7 +61,7 @@ const CreateEventModal = ({ userId }: { userId: string }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Create Event</Button>
+        <Button variant='default' className='rounded-xl'>Create Event</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Card,
   CardAction,
@@ -9,21 +11,23 @@ import {
 } from '@/components/ui/card';
 import React from 'react';
 import { Event } from '@/db';
+import TagList from './tag-list';
 type EventCardProps = {
   event: Event;
 };
 
 const EventCard = ({ event }: EventCardProps) => {
   return (
-    <Card className="w-[12rem] h-[15rem] m-2 shadow-sm">
-      <CardHeader>
-        <CardTitle>{event.name}</CardTitle>
-        {/* TODO: create a filter when clicking a tag */}
-        <CardDescription>{event.tags.length > 0 && `#${event.tags.join(' #')}`}</CardDescription>
+    <Card className="h-[15rem] m-2 shadow-sm">
+      <CardHeader className="grid grid-cols-4 items-center">
+        <CardTitle className="col-span-3 text-center">{event.name}</CardTitle>
+        <span className="text-xs">{event.date}</span>
+        <CardDescription>
+          <TagList tags={event.tags} />
+        </CardDescription>
         {/* <CardAction>Card Action</CardAction> */}
       </CardHeader>
       <CardContent>
-        <span>{event.date}</span>
         <p>{event.details}</p>
       </CardContent>
       <CardFooter>{/* <p>Card Footer</p> */}</CardFooter>
