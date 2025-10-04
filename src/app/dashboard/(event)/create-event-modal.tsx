@@ -4,7 +4,6 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -17,6 +16,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createNewEvent } from '../actions';
 import { z } from 'zod';
+import { useState } from 'react';
 
 type NewEventFormSchema = z.infer<typeof newEventFormSchema>;
 
@@ -39,6 +39,7 @@ const fieldTypes: FieldTypes = {
 };
 
 const CreateEventModal = ({ userId }: { userId: string }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const form = useForm<NewEventFormSchema>({
     resolver: zodResolver(newEventFormSchema),
     defaultValues: {
@@ -56,12 +57,14 @@ const CreateEventModal = ({ userId }: { userId: string }) => {
           .filter(Boolean)
       : [];
     const res = await createNewEvent({ ...data, ownerId: userId, tags });
-    console.log(res);
+    setIsOpen(false);
   };
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant='default' className='rounded-xl'>Create Event</Button>
+        <Button onClick={() => setIsOpen(true)} variant="default" className="rounded-xl">
+          Create Event
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -70,7 +73,9 @@ const CreateEventModal = ({ userId }: { userId: string }) => {
         <FormComponent form={form} fieldTypes={fieldTypes} handleAction={handleSubmit}>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline" onClick={() => setIsOpen(false)}>
+                Cancel
+              </Button>
             </DialogClose>
             <Button type="submit">Create</Button>
           </DialogFooter>

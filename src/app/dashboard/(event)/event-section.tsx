@@ -19,7 +19,7 @@ const EventSection = ({ userId, eventsList }: EventSectionProps) => {
   }, [userId, eventsList]);
 
   return (
-    <section className="w-full h-full flex justify-center items-center">
+    <section className="w-full h-full flex justify-center items-center pt-1">
       <div className="rounded-2xl shadow-md">
         <div id="top-row" className="bg-slate-400 rounded-t-2xl p-2 grid grid-cols-3">
           <h1 className="col-span-2 text-center text-xl font-bold">Events</h1>
@@ -28,7 +28,7 @@ const EventSection = ({ userId, eventsList }: EventSectionProps) => {
             <CreateEventModal userId={userId} />
           </nav>
         </div>
-        <EventContainer eventsList={eventsList} />
+        <EventContainer eventsList={store.filteredEvents()} />
       </div>
     </section>
   );

@@ -2,7 +2,6 @@
 
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
@@ -12,6 +11,8 @@ import {
 import React from 'react';
 import { Event } from '@/db';
 import TagList from './tag-list';
+import useEvent from './store';
+
 type EventCardProps = {
   event: Event;
 };
@@ -22,15 +23,14 @@ const EventCard = ({ event }: EventCardProps) => {
       <CardHeader className="grid grid-cols-4 items-center">
         <CardTitle className="col-span-3 text-center">{event.name}</CardTitle>
         <span className="text-xs">{event.date}</span>
-        <CardDescription>
-          <TagList tags={event.tags} />
-        </CardDescription>
-        {/* <CardAction>Card Action</CardAction> */}
+        <CardDescription></CardDescription>
       </CardHeader>
       <CardContent>
         <p>{event.details}</p>
       </CardContent>
-      <CardFooter>{/* <p>Card Footer</p> */}</CardFooter>
+      <CardFooter>
+        <TagList tags={event.tags} />
+      </CardFooter>
     </Card>
   );
 };

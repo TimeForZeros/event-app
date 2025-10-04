@@ -14,6 +14,7 @@ import { eq, inArray } from 'drizzle-orm';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 
 export const getSession = async () => {
   const session = await auth.api.getSession({
@@ -86,5 +87,6 @@ export const createNewEvent = async (data: any) => {
     details: data.details,
   };
   const [eventRow] = await db.insert(event).values(newEvent).returning();
+  revalidatePath('/dashboard');
   return eventRow;
 };

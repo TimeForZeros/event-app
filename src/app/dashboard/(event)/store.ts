@@ -5,13 +5,13 @@ type EventStoreState = {
   userId: string;
   eventsList: Event[];
   tagFilter: string[];
-  filteredEvents: Event[];
+  filteredEvents: () => Event[];
 };
 type EventStoreAction = {
   setUserId: (userId: string) => void;
   setEventsList: (eventsList: Event[]) => void;
   setTagFilter: (tagFilter: string[]) => void;
-  filterEvents: (evt: React.MouseEvent<HTMLElement>) => void;
+  addTagFilter: (tag: string) => void;
 };
 
 const useEvent = create<EventStoreState & EventStoreAction>((set, get) => ({
@@ -27,13 +27,7 @@ const useEvent = create<EventStoreState & EventStoreAction>((set, get) => ({
   setUserId: (userId) => set({ userId }), // TODO: check if should be one and done
   setEventsList: (eventsList) => set({ eventsList }),
   setTagFilter: (tagFilter) => set({ tagFilter }),
-  filterEvents: (evt) =>
-    set((state) => {
-      const tagElement = evt.target as HTMLElement;
-      const filterKey = tagElement.innerText.slice(1);
-      const tagFilter = [...new Set([...state.tagFilter, filterKey])];
-      state.tagFilter = tagFilter;
-    }),
+  addTagFilter: (tag) => set({ tagFilter: [...new Set([...get().tagFilter, tag])] }),
 }));
 
 export default useEvent;
