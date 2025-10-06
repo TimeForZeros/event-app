@@ -25,68 +25,40 @@ export const getSession = async () => {
 };
 
 export const getEvents = async (userId: string) => {
-  const eventsList = await db.select().from(event).where(eq(event.ownerId, userId));
+  const eventsList = await await db
+    .select({ event, eventTag })
+    .from(event)
+    .fullJoin(eventTagJunction, eq(event.id, eventTagJunction.eventId))
+    .fullJoin(eventTag, eq(eventTagJunction.tagId, eventTag.id))
+    .where(eq(event.ownerId, userId));
+    console.log(eventsList);
   return eventsList;
 };
 
-export const addTags = async (eventId: number, tagString: string) => {
-  const getExistingTags = async (tagNames: string[]): Promise<EventTag[]> =>
-    db.select().from(eventTag).where(inArray(eventTag.name, tagNames));
-
-  const tagNames = tagString
-    .split('#')
-    .map((tag) => tag.trim())
-    .filter(Boolean);
-  const tagRows = await getExistingTags(tagNames);
-
-  // create missing tags
-  if (tagRows.length < tagNames.length) {
-    const existingNames = tagRows.map((row) => row.name);
-    const newTags: NewEventTag[] = tagNames
-      .filter((tagName) => !existingNames.includes(tagName))
-      .map((tagName) => ({ name: tagName }));
-    const inserted = await db.insert(eventTag).values(newTags).onConflictDoNothing().returning();
-    tagRows.push(...inserted);
-  }
-  // get current junctions
-  const tagJunctions = await db
-    .select()
-    .from(eventTagJunction)
-    .where(eq(eventTagJunction.eventId, eventId));
-  const newTagIds: number[] = [];
-  if (tagJunctions.length) {
-    const existingTagRelations = tagJunctions.map((tagJunction) => tagJunction.tagId);
-    tagRows
-      .filter((tagRow) => !existingTagRelations.includes(tagRow.id))
-      .forEach((tagRow) => newTagIds.push(tagRow.id));
-  } else {
-    tagRows.forEach((tag) => newTagIds.push(tag.id));
-  }
-  if (newTagIds.length) {
-    console.log('hits');
-    const tagRelationsArr = newTagIds.map((tagId): NewEventTagJunction => ({ tagId, eventId }));
-    if (tagRelationsArr.length) {
-      await db.insert(eventTagJunction).values(tagRelationsArr);
-    }
-  }
-
-  return tagRows;
-};
-
-type NewEventResponse = {
-  event: Event;
-  tags?: EventTag[];
-};
+// type NewEventResponse = {
+//   event: Event;
+//   tags?: EventTag[];
+// };
 // TODO: fill out the data type
 export const createNewEvent = async (data: any) => {
   const newEvent: NewEvent = {
     name: data.name,
     ownerId: data.ownerId,
-    tags: data.tags || [],
     date: data.date || null,
     details: data.details,
   };
   const [eventRow] = await db.insert(event).values(newEvent).returning();
+  // console.log(eventRow);
+  // if (data.tags) {
+  //   const tagNames = data.tags.map((tag) => tag.name);
+  //   const tags = await db.select().from(eventTag).where(inArray(data.tags, eventTag.name));
+  //   const missingTags = tagNames.filter((tagName) => !tags.some((tag) => tag.name === tagName));
+  //   if (missingTags.length) {
+  //     const newTags = await db.insert(eventTag).values(missingTags).returning();
+  //     tags.push(...newTags);
+  //   }
+  //   const newEventTagJunctions = tags.map((tag) => ({ tagId: tag.id, eventId: eventRow.id }));
+  //   await db.insert(eventTagJunction).values(newEventTagJunctions);
+  // }
   revalidatePath('/dashboard');
-  return eventRow;
 };

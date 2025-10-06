@@ -3,11 +3,13 @@ import React, { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import EventContainer from './event-container';
 import CreateEventModal from './create-event-modal';
-import type { Event } from '@/db';
+import type { Event, EventTag } from '@/db';
 import useEvent from './store';
 
+type EventWithTags = Event & EventTag;
+
 type EventSectionProps = {
-  eventsList: Event[];
+  eventsList: EventWithTags[];
   userId: string;
 };
 
@@ -28,7 +30,7 @@ const EventSection = ({ userId, eventsList }: EventSectionProps) => {
             <CreateEventModal userId={userId} />
           </nav>
         </div>
-        <EventContainer eventsList={store.filteredEvents()} />
+        <EventContainer eventsList={eventsList} />
       </div>
     </section>
   );
