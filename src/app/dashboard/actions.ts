@@ -4,13 +4,9 @@ import {
   event,
   eventTag,
   eventTagJunction,
-  Event,
   NewEvent,
-  EventTag,
-  NewEventTag,
-  NewEventTagJunction,
 } from '@/db';
-import { eq, inArray } from 'drizzle-orm';
+import { eq, inArray, sql } from 'drizzle-orm';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -23,15 +19,14 @@ export const getSession = async () => {
   if (!session) redirect('/login');
   return session;
 };
-
 export const getEvents = async (userId: string) => {
-  const eventsList = await await db
-    .select({ event, eventTag })
+  const eventsList = await db
+    .select({ event, eventTags: sql<string[]>`json_agg(${eventTag.name})` })
     .from(event)
-    .fullJoin(eventTagJunction, eq(event.id, eventTagJunction.eventId))
-    .fullJoin(eventTag, eq(eventTagJunction.tagId, eventTag.id))
-    .where(eq(event.ownerId, userId));
-    console.log(eventsList);
+    .innerJoin(eventTagJunction, eq(event.id, eventTagJunction.eventId))
+    .innerJoin(eventTag, eq(eventTagJunction.tagId, eventTag.id))
+    .where(eq(event.ownerId, userId))
+    .groupBy(event.id);
   return eventsList;
 };
 
@@ -48,17 +43,21 @@ export const createNewEvent = async (data: any) => {
     details: data.details,
   };
   const [eventRow] = await db.insert(event).values(newEvent).returning();
-  // console.log(eventRow);
-  // if (data.tags) {
-  //   const tagNames = data.tags.map((tag) => tag.name);
-  //   const tags = await db.select().from(eventTag).where(inArray(data.tags, eventTag.name));
-  //   const missingTags = tagNames.filter((tagName) => !tags.some((tag) => tag.name === tagName));
-  //   if (missingTags.length) {
-  //     const newTags = await db.insert(eventTag).values(missingTags).returning();
-  //     tags.push(...newTags);
-  //   }
-  //   const newEventTagJunctions = tags.map((tag) => ({ tagId: tag.id, eventId: eventRow.id }));
-  //   await db.insert(eventTagJunction).values(newEventTagJunctions);
-  // }
+  if (data.tags.length) {
+    const tags = await db.select().from(eventTag).where(inArray(eventTag.name, data.tags));
+    const missingTags = data.tags
+      .filter((tagName) => !tags.some((tag) => tag.name === tagName))
+      .map((tag) => ({ name: tag }));
+    if (missingTags.length) {
+      const newTags = await db
+        .insert(eventTag)
+        .values(missingTags)
+        .onConflictDoNothing()
+        .returning();
+      tags.push(...newTags);
+    }
+    const newEventTagJunctions = tags.map((tag) => ({ tagId: tag.id, eventId: eventRow.id }));
+    await db.insert(eventTagJunction).values(newEventTagJunctions);
+  }
   revalidatePath('/dashboard');
 };
