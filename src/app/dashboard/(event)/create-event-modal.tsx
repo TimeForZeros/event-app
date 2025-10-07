@@ -38,7 +38,7 @@ const fieldTypes: FieldTypes = {
   tags: 'text',
 };
 
-const CreateEventModal = ({ userId }: { userId: string }) => {
+const CreateEventModal = () => {
   const [isOpen, setIsOpen] = useState(false);
   const form = useForm<NewEventFormSchema>({
     resolver: zodResolver(newEventFormSchema),
@@ -56,7 +56,12 @@ const CreateEventModal = ({ userId }: { userId: string }) => {
           .map((tag) => tag.trim())
           .filter(Boolean)
       : [];
-    const res = await createNewEvent({ ...data, ownerId: userId, tags });
+    const event = {
+      name: data.name,
+      details: data.details,
+      date: data.date,
+    };
+    const res = await createNewEvent({ event, tags });
     setIsOpen(false);
   };
   return (

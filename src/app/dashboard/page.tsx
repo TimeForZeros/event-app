@@ -1,11 +1,10 @@
-import { getEvents, getSession } from './actions';
+import { getEvents } from './actions';
 import EventSection from './(event)/event-section';
 
 const Dashboard = async () => {
-  const { user } = await getSession();
-  const eventsList = await getEvents(user.id);
+  const eventsList = await getEvents();
   return (
-    <EventSection userId={user.id} eventsList={eventsList} />
+    <EventSection eventsList={eventsList} />
   );
 };
 
