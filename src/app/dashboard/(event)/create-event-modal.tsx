@@ -12,7 +12,7 @@ import {
 import FormComponent from '../../form';
 import type { FieldTypes } from '../../types';
 
-import { useForm } from 'react-hook-form';
+import { useForm, UseFormReturn } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createNewEvent } from '../actions';
 import { z } from 'zod';

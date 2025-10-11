@@ -2,21 +2,33 @@ import { Button } from '@/components/ui/button';
 import useEvent from './store';
 
 const TagComponent = ({ tag }: { tag: string }) => {
-  const store = useEvent();
-  const addTagFilter = (tagName: string) => store.addTagFilter(tagName);
   return (
     <li>
-      <Button variant="link" onClick={() => addTagFilter(tag)} className="text-slate-600 p-0.5">
+      <Button variant="link" className="text-slate-600 p-0.5">
         #{tag}
       </Button>
     </li>
   );
 };
-const TagList = ({ tags }: { tags: string[] }) => {
-  if (!tags.length) return;
+const TagList = ({ eventTags }: { eventTags: string[] }) => {
+  if (!eventTags.length) return;
+  const store = useEvent();
+  const handleClick = (el: HTMLLIElement) => {
+    const tag = el.innerText.startsWith('#') && el.innerText.slice(1);
+    if (!tag) return;
+    const tagList = [...store.tagFilter]
+    const tagIdx = tagList.indexOf(tag);
+    if (tagIdx >= 0) {
+      tagList.splice(tagIdx, 1);
+    } else {
+      tagList.push(tag);
+    }
+    store.setTagFilter(tagList);
+
+  };
   return (
-    <ul className="flex">
-      {tags.map((tag: string) => (
+    <ul className="flex" onClick={(evt) => handleClick(evt.target as HTMLLIElement)}>
+      {eventTags.map((tag: string) => (
         <TagComponent key={tag} tag={tag} />
       ))}
     </ul>

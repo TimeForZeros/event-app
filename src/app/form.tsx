@@ -8,6 +8,7 @@ import type { FieldTypes } from './types';
 import { Textarea } from '@/components/ui/textarea';
 
 type FormProps = {
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   form: UseFormReturn<any>;
   fieldTypes: FieldTypes;
   handleAction: (values: any) => void | Promise<void>;

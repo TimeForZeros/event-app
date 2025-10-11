@@ -1,26 +1,18 @@
-'use client';
-import React, { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import EventContainer from './event-container';
 import CreateEventModal from './create-event-modal';
 import type { Event } from '@/db';
-import useEvent from './store';
 
-type EventWithTags = 
-  Event & {
-    eventTags?: string[];
-  };
-
-type EventSectionProps = {
-  eventsList: EventWithTags[];
+type EventWithTags = {
+  event: Event;
+  eventTags?: string[];
 };
 
-const EventSection = ({ eventsList }: EventSectionProps) => {
-  const store = useEvent();
-  useEffect(() => {
-    store.setEventsList(eventsList);
-  }, [eventsList]);
+type EventSectionProps = {
+  eventsData: EventWithTags[];
+};
 
+const EventSection = ({ eventsData }: EventSectionProps) => {
   return (
     <section className="w-full h-full flex justify-center items-center pt-1">
       <div className="rounded-2xl shadow-md">
@@ -31,7 +23,7 @@ const EventSection = ({ eventsList }: EventSectionProps) => {
             <CreateEventModal />
           </nav>
         </div>
-        <EventContainer eventsList={eventsList} />
+        <EventContainer eventsData={eventsData} />
       </div>
     </section>
   );
