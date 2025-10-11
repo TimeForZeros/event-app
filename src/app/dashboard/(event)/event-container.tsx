@@ -27,7 +27,8 @@ const EventContainer = ({ eventsData }: EventContainerProps) => {
     } else {
       deleteList.push(eventId);
     }
-  }, []);
+    store.setDeleteList(deleteList);
+  }, [store.deleteList]);
   return (
     <div className=" min-h-[50%] w-[80vw] grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {eventsList.map(({ event, eventTags }) => (
@@ -37,6 +38,7 @@ const EventContainer = ({ eventsData }: EventContainerProps) => {
           eventTags={eventTags}
           deleteSelect={store.enableDelete}
           handleClick={updateDeleteList}
+          isSelected={store.deleteList.includes(event.id)}
         />
       ))}
     </div>

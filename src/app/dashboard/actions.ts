@@ -6,6 +6,7 @@ import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 
+
 export const getSession = async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -57,3 +58,8 @@ export const createNewEvent = async (data: NewEventData) => {
   }
   revalidatePath('/dashboard');
 };
+
+export const deleteEvents = async (deletList: number[]) => {
+  await db.delete(event).where(inArray(event.id, deletList))
+  revalidatePath('/dashboard');
+}

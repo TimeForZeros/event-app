@@ -18,6 +18,7 @@ type EventCardProps = {
   eventTags?: string[];
   deleteSelect?: boolean;
   handleClick: (eventId: number) => void;
+  isSelected: boolean;
 };
 
 const DeleteIcon = ({ selected, eventId }: { selected?: boolean; eventId: number }) => (
@@ -26,15 +27,10 @@ const DeleteIcon = ({ selected, eventId }: { selected?: boolean; eventId: number
   </button>
 );
 
-const EventCard = ({ event, eventTags, deleteSelect, handleClick }: EventCardProps) => {
-  const [selected, setSelected] = useState(false);
-  const selectForDeletion = () => {
-    setSelected((prev) => !prev);
-    handleClick(event.id);
-  };
+const EventCard = ({ event, eventTags, deleteSelect, handleClick, isSelected }: EventCardProps) => {
   return (
-    <Card onClick={selectForDeletion} className="h-[15rem] m-2 shadow-sm relative">
-      {deleteSelect && <DeleteIcon selected={selected} eventId={event.id} />}
+    <Card onClick={() => handleClick(event.id)} className="h-[15rem] m-2 shadow-sm relative">
+      {deleteSelect && <DeleteIcon selected={isSelected} eventId={event.id} />}
       <CardHeader className="grid grid-cols-4 items-center">
         <CardTitle className="col-span-3 text-center">
           <EventDetails event={event} />
