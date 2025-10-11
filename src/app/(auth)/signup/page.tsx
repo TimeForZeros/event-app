@@ -43,7 +43,6 @@ const SignUp = () => {
     },
   });
   const handleSignUp = async (values: z.infer<typeof signUpSchema>) => {
-    console.log(values);
     await signUp(values);
   };
   return (

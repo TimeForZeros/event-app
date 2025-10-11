@@ -17,7 +17,6 @@ type FormProps = {
 };
 
 const FormComponent = ({ form, fieldTypes, handleAction, errorMessage, children }: FormProps) => {
-  console.log(fieldTypes);
   const fields = Object.keys(form.getValues());
   return (
     <Form {...form}>

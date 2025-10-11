@@ -5,7 +5,6 @@ import { deleteEvents } from '../actions';
 const DeleteButtonComponent = () => {
   const store = useEvent();
   const handleDeletion = async () => {
-    console.log(store.deleteList);
     if (!store.deleteList.length) return;
     await deleteEvents(store.deleteList);
     store.setEnableDelete(false);
