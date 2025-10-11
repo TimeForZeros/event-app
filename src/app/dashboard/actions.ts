@@ -17,10 +17,13 @@ export const getSession = async () => {
 export const getEvents = async () => {
   const { user } = await getSession();
   const eventsList = await db
-    .select({ event, eventTags: sql<string[]>`json_agg(${eventTag.name})` })
+    .select({ 
+      event, 
+      eventTags: sql<string[]>`COALESCE(json_agg(${eventTag.name}) FILTER (WHERE ${eventTag.name} IS NOT NULL), '[]')` 
+    })
     .from(event)
-    .innerJoin(eventTagJunction, eq(event.id, eventTagJunction.eventId))
-    .innerJoin(eventTag, eq(eventTagJunction.tagId, eventTag.id))
+    .leftJoin(eventTagJunction, eq(event.id, eventTagJunction.eventId))
+    .leftJoin(eventTag, eq(eventTagJunction.tagId, eventTag.id))
     .where(eq(event.ownerId, user.id))
     .groupBy(event.id);
   return eventsList;
