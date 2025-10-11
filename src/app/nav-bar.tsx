@@ -15,7 +15,7 @@ const LinkButton = ({ href, children }: LinkButtonProps) => (
 
 const NavBar = () => {
   return (
-    <header className='flex justify-center h-12 bg-slate-500 fixed w-screen top-0 items-center'>
+    <header className='flex justify-center h-12 bg-slate-500 fixed w-screen top-0 items-center z-10'>
       <nav>
         <LinkButton href={'/login'}>Log In</LinkButton>
         <LinkButton href={'/signup'}>Sign Up</LinkButton>
