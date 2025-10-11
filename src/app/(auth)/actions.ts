@@ -1,5 +1,4 @@
 import { redirect } from 'next/navigation';
-import { auth } from '@/lib/auth';
 import { authClient } from '@/lib/auth-client'; //import the auth client
 
 type LoginDetails = {
@@ -32,7 +31,8 @@ export const signUp = async ({
   name,
   callbackURL = '/dashboard',
 }: SignUpDetails) => {
-  const { data, error } = await authClient.signUp.email(
+  // const { data, error } = await authClient.signUp.email(
+  await authClient.signUp.email(
     {
       email,
       password,
@@ -40,7 +40,7 @@ export const signUp = async ({
       callbackURL,
     },
     {
-      onSuccess: (ctx) => redirect(callbackURL),
+      onSuccess: () => redirect(callbackURL),
       onError: (ctx) => {
         console.log(ctx.error);
         // display the error message

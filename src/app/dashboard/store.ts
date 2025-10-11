@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import type { Event } from '@/db';
 
 
 type EventStoreState = {
@@ -13,7 +12,7 @@ type EventStoreAction = {
   setEnableDelete: (enableDelete: boolean) => void;
 };
 
-const useEvent = create<EventStoreState & EventStoreAction>((set, get) => ({
+const useEvent = create<EventStoreState & EventStoreAction>((set) => ({
   tagFilter: [],
   deleteList: [],
   enableDelete: false,

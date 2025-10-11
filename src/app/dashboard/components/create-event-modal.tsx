@@ -12,7 +12,7 @@ import {
 import FormComponent from '../../form';
 import type { FieldTypes } from '../../types';
 
-import { useForm, UseFormReturn } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createNewEvent } from '../actions';
 import { z } from 'zod';
@@ -61,7 +61,7 @@ const CreateEventModal = () => {
       details: data.details,
       date: data.date,
     };
-    const res = await createNewEvent({ event, tags });
+    await createNewEvent({ event, tags });
     setIsOpen(false);
   };
   return (

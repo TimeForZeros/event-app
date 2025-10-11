@@ -6,7 +6,7 @@ type EventWithTags = {
   eventTags?: string[];
 };
 import useEvent from '../../../store';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import {useMemo } from 'react';
 
 type EventContainerProps = {
   eventsData: EventWithTags[];
@@ -19,16 +19,17 @@ const EventContainer = ({ eventsData }: EventContainerProps) => {
       store.tagFilter.every((tag) => eventData.eventTags?.includes(tag)),
     );
   }, [store.tagFilter, eventsData]);
-  const updateDeleteList = useCallback((eventId: number) => {
+  // todo: fix this
+  const updateDeleteList = (eventId: number) => {
     const deleteList = [...store.deleteList];
     const evtIdx = deleteList.indexOf(eventId);
     if (evtIdx >= 0) {
-      deleteList.splice(evtIdx, 1);
+      deleteList.splice(evtIdx, 1); // remove
     } else {
-      deleteList.push(eventId);
+      deleteList.push(eventId); // add
     }
     store.setDeleteList(deleteList);
-  }, [store.deleteList]);
+  };
   return (
     <div className=" min-h-[50%] w-[80vw] grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {eventsList.map(({ event, eventTags }) => (

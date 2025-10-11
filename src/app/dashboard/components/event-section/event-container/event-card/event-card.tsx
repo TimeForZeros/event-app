@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import React, { memo, useState } from 'react';
+import React, { memo } from 'react';
 import { Event } from '@/db';
 import TagList from './tag-list';
 import EventDetails from './event-details';

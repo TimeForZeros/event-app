@@ -37,6 +37,7 @@ const LogIn = () => {
       if (!error) return;
       setErrorMessage(error.message);
     } catch (err) {
+      console.error(err)
       setErrorMessage('Unknown Error');
     }
   };

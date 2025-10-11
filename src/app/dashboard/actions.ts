@@ -1,5 +1,5 @@
 'use server';
-import { db, event, eventTag, eventTagJunction, EventTag, Event, NewEvent } from '@/db';
+import { db, event, eventTag, eventTagJunction, NewEvent } from '@/db';
 import { eq, inArray, sql } from 'drizzle-orm';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';

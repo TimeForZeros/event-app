@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import useEvent from './store';
+import useEvent from '@/app/dashboard/store';
 
 const TagComponent = ({ tag }: { tag: string }) => {
   return (
@@ -11,8 +11,8 @@ const TagComponent = ({ tag }: { tag: string }) => {
   );
 };
 const TagList = ({ eventTags }: { eventTags: string[] }) => {
-  if (!eventTags.length) return;
   const store = useEvent();
+  if (!eventTags.length) return;
   const handleClick = (el: HTMLLIElement) => {
     const tag = el.innerText.startsWith('#') && el.innerText.slice(1);
     if (!tag) return;
