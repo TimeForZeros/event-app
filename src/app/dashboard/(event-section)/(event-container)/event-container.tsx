@@ -1,11 +1,11 @@
 'use client';
 import { Event } from '@/db';
-import EventCard from './event-card';
+import EventCard from './(event-card/event-card';
 type EventWithTags = {
   event: Event;
   eventTags?: string[];
 };
-import useEvent from './store';
+import useEvent from '../store';
 import { useCallback, useMemo, useRef, useState } from 'react';
 
 type EventContainerProps = {

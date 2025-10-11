@@ -1,4 +1,4 @@
-import EventContainer from './event-container';
+import EventContainer from './(event-container)/event-container';
 import CreateEventModal from './create-event-modal';
 import type { Event } from '@/db';
 import DeleteButtonComponent from './delete-button-component';
