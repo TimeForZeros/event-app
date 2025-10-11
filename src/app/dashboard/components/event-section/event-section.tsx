@@ -1,7 +1,7 @@
-import EventContainer from './(event-container)/event-container';
-import CreateEventModal from './create-event-modal';
+import EventContainer from './event-container/event-container';
+import CreateEventModal from '../create-event-modal';
 import type { Event } from '@/db';
-import DeleteButtonComponent from './delete-button-component';
+import DeleteButtonComponent from '../delete-button-component';
 
 type EventWithTags = {
   event: Event;

@@ -1,6 +1,6 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import useEvent from './store';
+import useEvent from '../store';
 import { deleteEvents } from '../actions';
 const DeleteButtonComponent = () => {
   const store = useEvent();
