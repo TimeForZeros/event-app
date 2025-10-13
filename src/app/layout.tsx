@@ -1,5 +1,4 @@
 import './globals.css';
-import NavBar from './nav-bar';
 
 export default async function RootLayout({
   children,
@@ -9,7 +8,6 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body>
-        <NavBar />
         {children}
       </body>
     </html>
