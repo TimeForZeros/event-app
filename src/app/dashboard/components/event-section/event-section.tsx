@@ -14,16 +14,18 @@ type EventSectionProps = {
 
 const EventSection = ({ eventsData }: EventSectionProps) => {
   return (
-    <section className="w-full h-full flex justify-center items-center pt-1">
-      <div className="rounded-2xl shadow-md">
+    <section className="w-full h-full flex justify-center pt-1">
+      <div className="w-[90%] rounded-2xl shadow-md">
         <div id="top-row" className="bg-slate-400 rounded-t-2xl p-2 grid grid-cols-3">
-          <h1 className="col-span-2 text-center text-xl font-bold">Events</h1>
+          <h1 className="col-span-2 text-center text-xl font-bold"></h1>
           <nav className="flex flex-row-reverse">
             <SelectButtonComponent />
             <CreateEventModal />
           </nav>
         </div>
-        <EventContainer eventsData={eventsData} />
+        <div className="flex justify-center">
+          <EventContainer eventsData={eventsData} />
+        </div>
       </div>
     </section>
   );
