@@ -34,7 +34,7 @@ const EventContainer = ({ eventsData }: EventContainerProps) => {
     });
   }, [setDeleteList]);
   return (
-    <div className=" min-h-[50%] w-[95%] grid grid-cols-1 gap-6 xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    <div className=" min-h-[50%] m-4 grid grid-cols-1 gap-5 xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {eventsList.map(({ event, eventTags }) => (
         <EventCard
           key={event.id}

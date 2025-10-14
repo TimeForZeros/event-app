@@ -13,6 +13,7 @@ import { Event } from '@/db';
 import TagList from './tag-list';
 import EventDetails from './event-details';
 import { Circle, CircleCheck } from 'lucide-react';
+import Image from 'next/image';
 type EventCardProps = {
   event: Event;
   eventTags?: string[];
@@ -29,7 +30,7 @@ const DeleteIcon = ({ selected, eventId }: { selected?: boolean; eventId: number
 
 const EventCard = ({ event, eventTags, deleteSelect, handleClick, isSelected }: EventCardProps) => {
   return (
-    <Card onClick={() => handleClick(event.id)} className="h-[15rem] m-2 shadow-sm relative">
+    <Card onClick={() => handleClick(event.id)} className="h-[15rem] w-[13rem] shadow-sm relative">
       {deleteSelect && <DeleteIcon selected={isSelected} eventId={event.id} />}
       <CardHeader className="grid grid-cols-4 items-center">
         <CardTitle className="col-span-3 text-center">
@@ -39,6 +40,13 @@ const EventCard = ({ event, eventTags, deleteSelect, handleClick, isSelected }: 
         <CardDescription></CardDescription>
       </CardHeader>
       <CardContent>
+          {/* <Image
+            src={''}
+            width={200}
+            height={200}
+            fill={false}
+            alt="placeholder"
+          /> */}
         <p>{event.details}</p>
       </CardContent>
       <CardFooter>{!!eventTags?.length && <TagList eventTags={eventTags} />}</CardFooter>

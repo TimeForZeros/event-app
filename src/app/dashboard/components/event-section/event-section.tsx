@@ -23,9 +23,7 @@ const EventSection = ({ eventsData }: EventSectionProps) => {
             <CreateEventModal />
           </nav>
         </div>
-        <div className="flex justify-center">
           <EventContainer eventsData={eventsData} />
-        </div>
       </div>
     </section>
   );
